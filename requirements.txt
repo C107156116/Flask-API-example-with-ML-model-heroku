@@ -1,0 +1,6 @@
+Flask
+Flask-Cors
+gunicorn
+numpy
+scikit-learn==0.22.0
+pandas==1.13
