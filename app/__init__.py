@@ -11,7 +11,7 @@ from flask import Flask, jsonify,request
 from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
-@app.route('/')
+@app.route('/test')
 def index():
      return 'hello!!'
 @app.route('/predict',methods=['POST'])
