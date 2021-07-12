@@ -21,7 +21,7 @@ def  postInput():
      act=[]
      input_data=[]
 
-     raw_df = pd.read_excel("WA_Fn-UseC_-HR-Employee- .xls")
+     raw_df = pd.read_excel("WA_Fn-UseC_-HR-Employee-Attrition_Data_First_Processes_SMOTE_2.xls")
      raw_df =raw_df[cols]
 
      for i in range(0,len(cols),1):
