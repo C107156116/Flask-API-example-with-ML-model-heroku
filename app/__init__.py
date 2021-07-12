@@ -9,8 +9,8 @@ CORS(app)
 @app.route('/test')
 def userin():
      return 'hello!!'
-@app.route('/rate',methods=['POST'])
-def postInput():
+@app.route('/predict',methods=['POST'])
+def  postInput():
      # 取得前端傳過來的值
      inserValues=request.get_json()
      cols =['Age','DailyRate','Department','DistanceFromHome','Education','EducationField','EmployeeNumber','EnvironmentSatisfaction','Gender','HourlyRate','JobInvolvement','JobLevel','JobRole','JobSatisfaction','MaritalStatus','MonthlyIncome','MonthlyRate','NumCompaniesWorked','OverTime','PercentSalaryHike','PerformanceRating','RelationshipSatisfaction','StockOptionLevel','TotalWorkingYears','TrainingTimesLastYear','WorkLifeBalance','YearsAtCompany','YearsInCurrentRole','YearsSinceLastPromotion','YearsWithCurrManager']
@@ -21,7 +21,7 @@ def postInput():
      act=[]
      input_data=[]
 
-     raw_df = pd.read_excel("WA_Fn-UseC_-HR-Employee-Attrition_Data_First_Processes_SMOTE_2.xls")
+     raw_df = pd.read_excel("WA_Fn-UseC_-HR-Employee- .xls")
      raw_df =raw_df[cols]
 
      for i in range(0,len(cols),1):
@@ -70,7 +70,8 @@ def postInput():
      forest = pickle.load(pickle_in)
      print(input_data)
      predict_result = forest.predict(input_data)
-     print(predict_result)
-
+     print(predict_result[0])
+     predict_rate=forest.predict_proba(input_data)
+     print(predict_rate)
      print(data)
-     return jsonify({'predict_result':str(predict_result[0])})
+     return jsonify({'predict_result':str(predict_result[0]),'Turnover_rate':str(predict_rate[0][1])})
