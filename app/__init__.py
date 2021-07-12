@@ -69,8 +69,9 @@ def postInput():
      pickle_in = open('randomforest.pickle','rb')
      forest = pickle.load(pickle_in)
      print(input_data)
+     predict_rate=forest.predict_proba(input_data)
      predict_result = forest.predict(input_data)
      print(predict_result)
 
      print(data)
-     return jsonify({'return':str(predict_result)})
+     return jsonify({'predict_result':str(predict_result[0]),'Turnover_rate':str(predict_rate[0][1])})
