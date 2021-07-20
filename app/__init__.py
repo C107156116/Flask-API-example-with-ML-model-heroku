@@ -14,6 +14,12 @@ def userin():
      return 'hello!!'
 @app.route('/getdata')
 def getdata():
+     raw_df = pd.read_csv("WA_Fn-UseC_-HR-Employee-Attrition.csv")
+     inserValuejs = raw_df.to_json(orient = 'records')
+     inserValues=json.loads(inserValuejs)
+     return make_response(dumps(inserValues))
+@app.route('/getdata_predict')
+def getdata_predict():
      # 取得前端傳過來的值
      raw_df1 = pd.read_csv("WA_Fn-UseC_-HR-Employee-Attrition.csv")
      inserValuejs = raw_df1.to_json(orient = 'records')
