@@ -12,6 +12,14 @@ CORS(app)
 @app.route('/test')
 def userin():
      return 'hello!!'
+@app.route('/getdata')
+def getdata():
+     raw_df = pd.read_csv("WA_Fn-UseC_-HR-Employee-Attrition.csv")
+     result = {}
+     for index, row in raw_df.iterrows():
+         #result[index] = row.to_json() 
+         result[index] = dict(row)
+     return jsonify(result)
 @app.route('/predict',methods=['POST'])
 def  postInput():
      # 取得前端傳過來的值
