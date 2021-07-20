@@ -331,7 +331,7 @@ def  figure():
      df['CompanyNum'] = df['NumCompaniesWorked'].apply(MTable)
     
      dept_att=df.groupby(['CompanyNum','Attrition']).apply(lambda x:x['DailyRate'].count()).reset_index(name='Counts')
-     fig=px.bar(dept_att,x='CompanyNum',y='Counts',color='Attrition',title='Department wise Counts of People in an Organization')
+     # fig=px.bar(dept_att,x='CompanyNum',y='Counts',color='Attrition',title='Department wise Counts of People in an Organization')
      dept_att['jinanhansome']=''
      for i in range(len(dept_att)):
          temp=dept_att[dept_att['CompanyNum'][i]==dept_att['CompanyNum']]
@@ -343,7 +343,7 @@ def  figure():
      final_df=pd.merge(Tra_att,dept_att,on="CompanyNum")
      final_df['Mani']=final_df['Rate']/final_df['jinanhansome']
      final_df=final_df[final_df['Attrition']=='Yes']
-     fig=px.bar(final_df,x='CompanyNum',y='Mani',title='MaritalStatus wise Counts of People in an Organization')
+     # fig=px.bar(final_df,x='CompanyNum',y='Mani',title='MaritalStatus wise Counts of People in an Organization')
      # fig.show()
      d_records = final_df.to_dict('records')
      sent_data.append(d_records)
@@ -396,7 +396,7 @@ def  figure():
      df['MonthlyIncome'] = df['MonthlyIncome'].apply(MTable2,args=('MonthlyIncome',quantiles))
      
      dept_att=df.groupby(['MonthlyIncome','Attrition']).apply(lambda x:x['DailyRate'].count()).reset_index(name='Counts')
-     fig=px.bar(dept_att,x='MonthlyIncome',y='Counts',color='Attrition',title='Department wise Counts of People in an Organization')
+     # fig=px.bar(dept_att,x='MonthlyIncome',y='Counts',color='Attrition',title='Department wise Counts of People in an Organization')
      dept_att['jinanhansome']=''
      for i in range(len(dept_att)):
          temp=dept_att[dept_att['MonthlyIncome'][i]==dept_att['MonthlyIncome']]
@@ -408,7 +408,7 @@ def  figure():
      final_df=pd.merge(Tra_att,dept_att,on="MonthlyIncome")
      final_df['Mani']=final_df['Rate']/final_df['jinanhansome']
      final_df=final_df[final_df['Attrition']=='Yes']
-     fig=px.bar(final_df,x='MonthlyIncome',y='Mani',title='MaritalStatus wise Counts of People in an Organization')
+     # fig=px.bar(final_df,x='MonthlyIncome',y='Mani',title='MaritalStatus wise Counts of People in an Organization')
      # fig.show()
     
      d_records = final_df.to_dict('records')
@@ -416,3 +416,4 @@ def  figure():
      
      
      return make_response(dumps(sent_data))
+
