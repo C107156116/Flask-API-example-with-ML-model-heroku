@@ -23,6 +23,7 @@ def getdata():
 def getdata_predict():
      # 取得前端傳過來的值
      raw_df1 = pd.read_csv("WA_Fn-UseC_-HR-Employee-Attrition.csv")
+     raw_df1 =raw_df1[0:201]
      inserValuejs = raw_df1.to_json(orient = 'records')
      inserValues=json.loads(inserValuejs)
      cols_data=['Age','BusinessTravel','DailyRate','Department','DistanceFromHome','Education','EducationField','EmployeeNumber','EnvironmentSatisfaction','Gender','HourlyRate','JobInvolvement','JobLevel','JobRole','JobSatisfaction','MaritalStatus','MonthlyIncome','MonthlyRate','NumCompaniesWorked','OverTime','PercentSalaryHike','PerformanceRating','RelationshipSatisfaction','StockOptionLevel','TotalWorkingYears','TrainingTimesLastYear','WorkLifeBalance','YearsAtCompany','YearsInCurrentRole','YearsSinceLastPromotion','YearsWithCurrManager']
