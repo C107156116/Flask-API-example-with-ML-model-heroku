@@ -15,6 +15,7 @@ def userin():
 @app.route('/getdata')
 def getdata():
      raw_df = pd.read_csv("WA_Fn-UseC_-HR-Employee-Attrition.csv")
+     raw_df =raw_df[0:201]
      inserValuejs = raw_df.to_json(orient = 'records')
      inserValues=json.loads(inserValuejs)
      return make_response(dumps(inserValues))
