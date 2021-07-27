@@ -450,7 +450,11 @@ def  figure():
      print(type(compare_data))
      compare_data_v=compare_data.values
      a=[]
+     b=[]
+     c=[]
+     print(len(compare_data_v))
      for i in range(0,len(compare_data_v),1):   
+          print(i)
           compare_data_v[i][0]=OverTime[compare_data_v[i][0]]
           compare_data_v[i][1]=BusinessTravel[compare_data_v[i][1]]    
           compare_data_v[i][2]=StockOptionLevel[str(compare_data_v[i][2])]
@@ -464,10 +468,64 @@ def  figure():
           compare_data_v[i][8]=NumCompaniesWorked[str(compare_data_v[i][8])]    
           compare_data_v[i][9]=str(int((round(compare_data_v[i][9],-1))/10))
           compare_data_v[i][9]=Age_value[compare_data_v[i][9]]
-          
           max_thir=list(map(list(compare_data_v[i]).index, heapq.nlargest(3, compare_data_v[i])))
-          a.append(cols[max_thir[0]]+','+cols[max_thir[1]]+','+cols[max_thir[2]])
-     compare_data['reason']=a
-     inserValuejs = compare_data.to_json(orient = 'records')
+          a.append(str(cols[max_thir[0]]))
+          b.append(str(cols[max_thir[1]]))
+          c.append(str(cols[max_thir[2]]))
+     
+     compare_data['reason1']=a
+     compare_data['reason2']=b
+     compare_data['reason3']=c
+     reason1_list=[]
+     reason2_list=[]
+     reason3_list=[]
+     count1_list=[]
+     count2_list=[]
+     count3_list=[]
+     count_total_list=[]
+     for val, cnt in compare_data.reason1.value_counts().iteritems():
+     #    print(val,cnt)
+          count1_list.append(cnt)
+          reason1_list.append(val)
+     for val, cnt in compare_data.reason2.value_counts().iteritems():
+     #    print(val,cnt)
+          count2_list.append(cnt)
+          reason2_list.append(val)
+     for val, cnt in compare_data.reason3.value_counts().iteritems():
+     #    print(val,cnt)
+          count3_list.append(cnt)
+          reason3_list.append(val)
+     url_dict1={
+          'reason':reason1_list,
+          'count1':count1_list,
+          }
+     url_dict2={
+          'reason':reason2_list,
+          'count2':count2_list,
+          }
+     url_dict3={
+          'reason':reason3_list,
+          'count3':count3_list,
+          }
+     df_count1=pd.DataFrame(url_dict1)
+     df_count2=pd.DataFrame(url_dict2)
+     df_count3=pd.DataFrame(url_dict3)
+     dfs = [df_count2,df_count3]
+     for df in dfs:
+          df_count1 = df_count1.merge(df, on=['reason'], how='outer')
+     df_count1 = df_count1.fillna(0)
+
+     df_count=df_count1.groupby('reason').apply(lambda x:x['count1']*3+x['count2']*2+x['count3']*1).reset_index(name='Counts')
+     df_count=df_count.sort_values(by='Counts', ascending=False, na_position='first').drop('level_1',axis=1)
+     df_count.reset_index(inplace = True) 
+     df_count=df_count.drop('index',axis=1)
+     df_count['total']=df_count['Counts'].sum()
+     df_count['rate']=''
+     for i in range(len(df_count)):
+         df_count.loc[i,'rate']=df_count['Counts'][i]/df_count['total'][i]
+     df_count=df_count.drop(['Counts','total'],axis=1)
+     print(df_count)
+
+     inserValuejs = df_count.to_json(orient = 'records')
      inserValues=json.loads(inserValuejs)
      return make_response(dumps(inserValues))
