@@ -16,7 +16,6 @@ app.config['MYSQL_USER']='GqD8cGeo5O'
 app.config['MYSQL_PASSWORD']='BKeOFOJ8xs'
 app.config['MYSQL_DB']='GqD8cGeo5O'
 
-CORS(app)
 
 
 mysql=MySQL(app)
