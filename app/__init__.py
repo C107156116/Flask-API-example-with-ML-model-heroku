@@ -4,6 +4,7 @@ import pickle
 import pandas as pd
 import json
 import heapq
+from flask_mysqldb import MySQL
 from flask import Flask, jsonify,request
 from flask_cors import CORS
 from json import dumps
@@ -11,6 +12,16 @@ from flask import Flask, make_response
 app = Flask(__name__)
 CORS(app)
 @app.route('/test')
+app.config['MYSQL_HOST']='remotemysql.com'
+app.config['MYSQL_USER']='GqD8cGeo5O'
+app.config['MYSQL_PASSWORD']='BKeOFOJ8xs'
+app.config['MYSQL_DB']='GqD8cGeo5O'
+
+mysql=MySQL(app)
+
+cols=['Age','Attrition','BusinessTravel','DailyRate','Department','DistanceFromHome','Education','EducationField','EmployeeCount','EmployeeNumber','EnvironmentSatisfaction','Gender','HourlyRate','JobInvolvement','JobLevel','JobRole','JobSatisfaction','MaritalStatus','MonthlyIncome','MonthlyRate','NumCompaniesWorked','Over18','OverTime','PercentSalaryHike','PerformanceRating','RelationshipSatisfaction','StandardHours','StockOptionLevel','TotalWorkingYears','TrainingTimesLastYear','WorkLifeBalance','YearsAtCompany','YearsInCurrentRole','YearsSinceLastPromotion','YearsWithCurrManager']
+
+
 def userin():
      return 'hello!!'
 @app.route('/getdata')
@@ -791,3 +802,70 @@ def  figure():
      inserValuejs = compare_data.to_json(orient = 'records')
      inserValues=json.loads(inserValuejs)
      return make_response(dumps(inserValues))
+
+
+@app.route("/insert",methods=['POST'])
+def inser():   
+    inserValues=request.get_json()
+    tmp=[]       
+    for i in range(0,len(cols),1):
+        tmp.append(inserValues[cols[i]])    
+    value=tuple(tmp)   
+    if request.method == "POST":
+        cur=mysql.connection.cursor()
+        cur.execute("INSERT INTO employee_profile(Age,Attrition,BusinessTravel,DailyRate,Department,DistanceFromHome,Education,EducationField,EmployeeCount,EmployeeNumber,EnvironmentSatisfaction,Gender,HourlyRate,JobInvolvement,JobLevel,JobRole,JobSatisfaction,MaritalStatus,MonthlyIncome,MonthlyRate,NumCompaniesWorked,Over18,OverTime,PercentSalaryHike,PerformanceRating,RelationshipSatisfaction,StandardHours,StockOptionLevel,TotalWorkingYears,TrainingTimesLastYear,WorkLifeBalance,YearsAtCompany,YearsInCurrentRole,YearsSinceLastPromotion,YearsWithCurrManager) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",value)
+        mysql.connection.commit()     
+
+    return "inserted"        
+
+@app.route('/gettable', methods = ['GET'])
+def Get():
+    tmp=[]
+    table=[]
+    mycursor = mysql.connection.cursor()
+    mycursor.execute("SELECT * FROM employee_profile")
+    data = mycursor.fetchall()
+    for i in range(0,len(data),1):
+        for x in range(0,len(data[i]),1):
+            tmp.append(data[i][x])
+        table.append(tmp)
+        tmp=[]
+
+    field_names = [i[0] for i in mycursor.description]
+        
+    data=pd.DataFrame(table,columns=field_names)
+    return_data=data.to_dict('records')
+    
+    return make_response(dumps(return_data)) 
+
+@app.route('/delete', methods = ['POST'])
+def delete():
+    delete_Values=request.get_json()
+    target_id=delete_Values['EmployeeNumber']
+    cur = mysql.connection.cursor()
+    cur.execute("DELETE FROM employee_profile WHERE EmployeeNumber=%s", (target_id,))
+    mysql.connection.commit()
+    return "deleted"
+
+@app.route('/update',methods=['POST','GET'])
+def update():
+    up_tmp=[]
+    Update_Values=request.get_json()
+
+    if request.method == 'POST':
+        update_Values=request.get_json()
+        target_id=Update_Values['EmployeeNumber']
+        
+        for i in range(0,len(cols),1):
+            up_tmp.append(update_Values[cols[i]])
+        up_tmp.append(target_id)
+        value=tuple(up_tmp)   
+
+        cur = mysql.connection.cursor()
+        cur.execute("""
+               UPDATE employee_profile
+               SET Age=%s,Attrition=%s,BusinessTravel=%s,DailyRate=%s,Department=%s,DistanceFromHome=%s,Education=%s,EducationField=%s,EmployeeCount=%s,EmployeeNumber=%s,EnvironmentSatisfaction=%s,Gender=%s,HourlyRate=%s,JobInvolvement=%s,JobLevel=%s,JobRole=%s,JobSatisfaction=%s,MaritalStatus=%s,MonthlyIncome=%s,MonthlyRate=%s,NumCompaniesWorked=%s,Over18=%s,OverTime=%s,PercentSalaryHike=%s,PerformanceRating=%s,RelationshipSatisfaction=%s,StandardHours=%s,StockOptionLevel=%s,TotalWorkingYears=%s,TrainingTimesLastYear=%s,WorkLifeBalance=%s,YearsAtCompany=%s,YearsInCurrentRole=%s,YearsSinceLastPromotion=%s,YearsWithCurrManager=%s 
+               WHERE EmployeeNumber=%s
+            """, value)
+        mysql.connection.commit()
+        return "updated"
