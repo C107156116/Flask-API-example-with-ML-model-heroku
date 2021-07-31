@@ -10,12 +10,14 @@ from flask_cors import CORS
 from json import dumps
 from flask import Flask, make_response
 app = Flask(__name__)
-CORS(app)
 @app.route('/test')
 app.config['MYSQL_HOST']='remotemysql.com'
 app.config['MYSQL_USER']='GqD8cGeo5O'
 app.config['MYSQL_PASSWORD']='BKeOFOJ8xs'
 app.config['MYSQL_DB']='GqD8cGeo5O'
+
+CORS(app)
+
 
 mysql=MySQL(app)
 
