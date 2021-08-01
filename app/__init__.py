@@ -743,6 +743,8 @@ def  figure():
      sent_data.append(d_records)
 
      #MonthlyIncome
+     df['MonthlyIncome']=df['MonthlyIncome'].astype(float)
+     df['Age']=df['Age'].astype(float)
      quantiles = df.quantile(q=[0.25,0.5,0.75])
 
      print(type(quantiles))
@@ -821,8 +823,9 @@ def  figure():
      sent_data.append(d_records)
 
 #Age
-
+     
      df['Age']=round(pd.Series(df['Age']),-1)
+     print(df['Age'])
      print(type(df['Age']))
      dept_att=df.groupby(['Age','Attrition']).apply(lambda x:x['Age'].count()).reset_index(name='Counts')
      for i in range(len(dept_att)):
@@ -842,45 +845,119 @@ def  figure():
 
      d_records = final_df3.to_dict('records')
      sent_data.append(d_records)
-     compare=pd.read_csv("Employee.api.csv")
-     cols=['OverTime','BusinessTravel','StockOptionLevel','JobInvolvement','JobSatisfaction','MaritalStatus','EnvironmentSatisfaction','MonthlyIncome','NumCompaniesWorked','Age']
+     
+     
+     compare=df
+     cols=['Attrition','OverTime','BusinessTravel','StockOptionLevel','JobInvolvement','JobSatisfaction','MaritalStatus','EnvironmentSatisfaction','MonthlyIncome','NumCompaniesWorked','Age']
+     col=['OverTime','BusinessTravel','StockOptionLevel','JobInvolvement','JobSatisfaction','MaritalStatus','MonthlyIncome','CompanyNum','EnvironmentSatisfaction','Age']
 
-     result=[]
+     print(sent_data)
 
-     OverTime={'Yes':sent_data[0][1]['Mani'],'No':sent_data[0][0]['Mani']}
-     BusinessTravel={'Non-Travel':sent_data[1][0]['Mani'],'Travel_Frequently':sent_data[1][1]['Mani'],'Travel_Rarely':sent_data[1][2]['Mani']}
-     StockOptionLevel={'0':sent_data[2][0]['Mani'],'1':sent_data[2][1]['Mani'],'2':sent_data[2][2]['Mani'],'3':sent_data[2][3]['Mani']}
-     JobInvolvement={'1':sent_data[3][0]['Mani'],'2':sent_data[3][1]['Mani'],'3':sent_data[3][2]['Mani'],'4':sent_data[3][3]['Mani']}
-     JobSatisfaction={'1':sent_data[4][0]['Mani'],'2':sent_data[4][1]['Mani'],'3':sent_data[4][2]['Mani'],'4':sent_data[4][3]['Mani']}
-     MaritalStatus={'Divorced':sent_data[5][0]['Mani'],'Married':sent_data[5][1]['Mani'],'Single':sent_data[5][2]['Mani']}
-     MonthlyIncome={'2911.0後標':sent_data[6][0]['Mani'],'4919.0均標':sent_data[6][1]['Mani'],'8379.0前標':sent_data[6][2]['Mani']}
-     NumCompaniesWorked={'3-down':sent_data[7][0]['Mani'],'3-7':sent_data[7][1]['Mani'],'7-up':sent_data[7][2]['Mani']}
-     EnvironmentSatisfaction={'1':sent_data[8][0]['Mani'],'2':sent_data[8][1]['Mani'],'3':sent_data[8][2]['Mani'],'4':sent_data[8][3]['Mani']}
-     Age_value={2:sent_data[9][0]['Mani'],3:sent_data[9][1]['Mani'],4:sent_data[9][2]['Mani'],5:sent_data[9][3]['Mani'],6:sent_data[9][4]['Mani']}
+     for i in range(0,len(cols)-2,1):
+         globals()[col[i]]={}
+         for x in range(0,len(sent_data[i]),1):
+             globals()[col[i]][sent_data[i][x][col[i]]]=sent_data[i][x]['Mani']             
+             if col[i] == "MonthlyIncome":
+                 sent_0=sent_data[i][x][col[i]]
+                 sent_1=sent_data[i][x][col[i]]
+                 sent_2=sent_data[i][x][col[i]]
+             
+     Age_value={'2':sent_data[9][0]['Mani'],'3':sent_data[9][1]['Mani'],'4':sent_data[9][2]['Mani'],'5':sent_data[9][3]['Mani'],'6':sent_data[9][4]['Mani']}
+          
+
+
+     
+        
      compare_data=compare[cols]
+     compare_data=compare_data[compare_data["Attrition"] == "Yes"]
+     compare_data=compare_data.drop("Attrition", axis = 1)
      compare_data_v=compare_data.values
      a=[]
+     b=[]
+     c=[]
+     print(len(compare_data))
      for i in range(0,len(compare_data_v),1):   
-          compare_data_v[i][0]=OverTime[compare_data_v[i][0]]
-          compare_data_v[i][1]=BusinessTravel[compare_data_v[i][1]]    
-          compare_data_v[i][2]=StockOptionLevel[str(compare_data_v[i][2])]
-          compare_data_v[i][3]=JobInvolvement[str(compare_data_v[i][3])]
-          compare_data_v[i][4]=JobSatisfaction[str(compare_data_v[i][4])]
-          compare_data_v[i][5]=MaritalStatus[compare_data_v[i][5]]
-          compare_data_v[i][6]=EnvironmentSatisfaction[str(compare_data_v[i][6])]    
-          compare_data_v[i][7]=income_value(compare_data_v[i][7],low,hi)
-          compare_data_v[i][7]=MonthlyIncome[compare_data_v[i][7]]    
-          compare_data_v[i][8]=MTable(compare_data_v[i][8])
-          compare_data_v[i][8]=NumCompaniesWorked[str(compare_data_v[i][8])]    
-          compare_data_v[i][9]=(int((round(compare_data_v[i][9],-1))/10))
-          compare_data_v[i][9]=Age_value[compare_data_v[i][9]]
-          
-          max_thir=list(map(list(compare_data_v[i]).index, heapq.nlargest(3, compare_data_v[i])))
-          a.append(cols[max_thir[0]]+','+cols[max_thir[1]]+','+cols[max_thir[2]])
-     compare_data['reason']=a
-     inserValuejs = compare_data.to_json(orient = 'records')
-     inserValues=json.loads(inserValuejs)
-     return make_response(dumps(inserValues))
+         print(i)
+         compare_data_v[i][0]=OverTime[compare_data_v[i][0]]
+         compare_data_v[i][1]=BusinessTravel[compare_data_v[i][1]]    
+         compare_data_v[i][2]=StockOptionLevel[compare_data_v[i][2]]
+         compare_data_v[i][3]=JobInvolvement[compare_data_v[i][3]]
+         compare_data_v[i][4]=JobSatisfaction[compare_data_v[i][4]]
+         compare_data_v[i][5]=MaritalStatus[compare_data_v[i][5]]
+         compare_data_v[i][6]=EnvironmentSatisfaction[compare_data_v[i][6]]    
+         compare_data_v[i][7]=income_value(compare_data_v[i][7],low,hi,sent_0,sent_1,sent_2)
+         compare_data_v[i][7]=MonthlyIncome[compare_data_v[i][7]]    
+         compare_data_v[i][8]=MTable(compare_data_v[i][8])
+         compare_data_v[i][8]=CompanyNum[str(compare_data_v[i][8])]    
+         compare_data_v[i][9]=str(int((round(compare_data_v[i][9],-1))/10))
+         compare_data_v[i][9]=Age_value[compare_data_v[i][9]]
+
+         max_thir=list(map(list(compare_data_v[i]).index, heapq.nlargest(3, compare_data_v[i])))
+         a.append(str(cols[max_thir[0]]))
+         b.append(str(cols[max_thir[1]]))
+         c.append(str(cols[max_thir[2]]))
+     
+     compare_data['reason1']=a
+     compare_data['reason2']=b
+     compare_data['reason3']=c
+     
+     print(compare_data['reason1'])
+     
+     reason1_list=[]
+     reason2_list=[]
+     reason3_list=[]
+     count1_list=[]
+     count2_list=[]
+     count3_list=[]
+     
+     for val, cnt in compare_data.reason1.value_counts().iteritems():
+     #    print(val,cnt)
+          count1_list.append(cnt)
+          reason1_list.append(val)
+     for val, cnt in compare_data.reason2.value_counts().iteritems():
+     #    print(val,cnt)
+          count2_list.append(cnt)
+          reason2_list.append(val)
+     for val, cnt in compare_data.reason3.value_counts().iteritems():
+     #    print(val,cnt)
+          count3_list.append(cnt)
+          reason3_list.append(val)
+     url_dict1={
+          'reason':reason1_list,
+          'count1':count1_list,
+          }
+     url_dict2={
+          'reason':reason2_list,
+          'count2':count2_list,
+          }
+     url_dict3={
+          'reason':reason3_list,
+          'count3':count3_list,
+          }
+     df_count1=pd.DataFrame(url_dict1)
+     df_count2=pd.DataFrame(url_dict2)
+     df_count3=pd.DataFrame(url_dict3)
+     dfs = [df_count2,df_count3]
+     for df in dfs:
+          df_count1 = df_count1.merge(df, on=['reason'], how='outer')
+     df_count1 = df_count1.fillna(0)
+
+     df_count=df_count1.groupby('reason').apply(lambda x:x['count1']*3+x['count2']*2+x['count3']*1).reset_index(name='Counts')
+     df_count=df_count.sort_values(by='Counts', ascending=False, na_position='first').drop('level_1',axis=1)
+     df_count.reset_index(inplace = True) 
+     df_count=df_count.drop('index',axis=1)
+     df_count['total']=df_count['Counts'].sum()
+     df_count['rate']=''
+     
+     for i in range(len(df_count)):
+         df_count.loc[i,'rate']=df_count['Counts'][i]/df_count['total'][i]
+     df_count=df_count.drop(['Counts','total'],axis=1)
+     print(df_count)
+
+     js = compare_data.to_dict(orient="records")
+
+     print(type(compare_data))
+     return make_response(dumps(js))
 
 
 @app.route("/insert",methods=['POST'])
