@@ -548,9 +548,9 @@ def  Pie_chart():
          compare_data_v[i][9]=Age_value[compare_data_v[i][9]]
 
          max_thir=list(map(list(compare_data_v[i]).index, heapq.nlargest(3, compare_data_v[i])))
-         a.append(str(cols[max_thir[0]]))
-         b.append(str(cols[max_thir[1]]))
-         c.append(str(cols[max_thir[2]]))
+         a.append(str(col[max_thir[0]]))
+         b.append(str(col[max_thir[1]]))
+         c.append(str(col[max_thir[2]]))
      
      compare_data['reason1']=a
      compare_data['reason2']=b
