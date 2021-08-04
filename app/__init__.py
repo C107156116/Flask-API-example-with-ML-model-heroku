@@ -921,70 +921,43 @@ def  figure():
          a.append(str(col[max_thir[0]]))
          b.append(str(col[max_thir[1]]))
          c.append(str(col[max_thir[2]]))
-     
-     compare_data['reason1']=a
-     compare_data['reason2']=b
-     compare_data['reason3']=c
-     
-     print(compare_data['reason1'])
-     
-     reason1_list=[]
-     reason2_list=[]
-     reason3_list=[]
-     count1_list=[]
-     count2_list=[]
-     count3_list=[]
-     
-     for val, cnt in compare_data.reason1.value_counts().iteritems():
-     #    print(val,cnt)
-          count1_list.append(cnt)
-          reason1_list.append(val)
-     for val, cnt in compare_data.reason2.value_counts().iteritems():
-     #    print(val,cnt)
-          count2_list.append(cnt)
-          reason2_list.append(val)
-     for val, cnt in compare_data.reason3.value_counts().iteritems():
-     #    print(val,cnt)
-          count3_list.append(cnt)
-          reason3_list.append(val)
-     url_dict1={
-          'reason':reason1_list,
-          'count1':count1_list,
-          }
-     url_dict2={
-          'reason':reason2_list,
-          'count2':count2_list,
-          }
-     url_dict3={
-          'reason':reason3_list,
-          'count3':count3_list,
-          }
-     df_count1=pd.DataFrame(url_dict1)
-     df_count2=pd.DataFrame(url_dict2)
-     df_count3=pd.DataFrame(url_dict3)
-     dfs = [df_count2,df_count3]
-     for df in dfs:
-          df_count1 = df_count1.merge(df, on=['reason'], how='outer')
-     df_count1 = df_count1.fillna(0)
+     year_arr=[]
+     month_arr=[]
+     day_arr=[]   
+     for i in range(0,len(compare_data),1):
+         year=np.random.randint(2000,2021)
+         year_arr.append(year)
+         month=np.random.randint(1,12)
+         month_arr.append(month)
+         if month in [1,3,5,7,8,10,12]:
+             day=str(np.random.randint(1,31))
+         elif month in [4,6,9,11]:
+             day=str(np.random.randint(1,30))
+         else:
+             if year%4 == 0:              
+                 day=str(np.random.randint(1,29))
+             else:
+                 day=str(np.random.randint(1,28))
+         day_arr.append(day)       
+     print(len(compare_data),len(year_arr))
+    
+     compare_data['reason']=a
+     compare_data['year']=year_arr
+     compare_data['month']=month_arr
+     compare_data['day']=day_arr
+     compare_data['EmployeeNumber']=compare['EmployeeNumber']
+     compare_data['Department']=compare['Department']
+     compare_data['Age']=compare['Age']
+     compare_data['Gender']=compare['Gender']
+     compare_data['EducationField']=compare['EducationField']
+     compare_data['JobRole']=compare['JobRole']
+     compare_data['MaritalStatus']=compare['MaritalStatus']
 
-     df_count=df_count1.groupby('reason').apply(lambda x:x['count1']).reset_index(name='Counts')
-     df_count=df_count.sort_values(by='Counts', ascending=False, na_position='first').drop('level_1',axis=1)
-     df_count.reset_index(inplace = True) 
-     df_count=df_count.drop('index',axis=1)
-     df_count['total']=df_count['Counts'].sum()
-     df_count['rate']=''
-     
-     for i in range(len(df_count)):
-         df_count.loc[i,'rate']=df_count['Counts'][i]/df_count['total'][i]
-     df_count=df_count.drop(['Counts','total'],axis=1)
-     print(df_count)
-     compare_data=compare_data.drop(['reason2','reason3'],axis=1)
+     #compare_data['reason2']=b
+     #compare_data['reason3']=c
      js = compare_data.to_dict(orient="records")
 
-     print(type(compare_data))
      return make_response(dumps(js))
-
-
 @app.route("/insert",methods=['POST'])
 def inser():   
     inserValues=request.get_json()
