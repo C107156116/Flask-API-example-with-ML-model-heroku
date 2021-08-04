@@ -967,7 +967,7 @@ def  figure():
           df_count1 = df_count1.merge(df, on=['reason'], how='outer')
      df_count1 = df_count1.fillna(0)
 
-     df_count=df_count1.groupby('reason').apply(lambda x:x['count1']*3+x['count2']*2+x['count3']*1).reset_index(name='Counts')
+     df_count=df_count1.groupby('reason').apply(lambda x:x['count1']).reset_index(name='Counts')
      df_count=df_count.sort_values(by='Counts', ascending=False, na_position='first').drop('level_1',axis=1)
      df_count.reset_index(inplace = True) 
      df_count=df_count.drop('index',axis=1)
@@ -978,7 +978,7 @@ def  figure():
          df_count.loc[i,'rate']=df_count['Counts'][i]/df_count['total'][i]
      df_count=df_count.drop(['Counts','total'],axis=1)
      print(df_count)
-
+     compare_data=compare_data.drop(['reason2','reason3'],axis=1)
      js = compare_data.to_dict(orient="records")
 
      print(type(compare_data))
