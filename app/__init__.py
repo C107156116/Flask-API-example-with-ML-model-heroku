@@ -505,9 +505,6 @@ def  Pie_chart():
      compare=df
      cols=['Attrition','OverTime','BusinessTravel','StockOptionLevel','JobInvolvement','JobSatisfaction','MaritalStatus','EnvironmentSatisfaction','MonthlyIncome','NumCompaniesWorked','Age']
      col=['OverTime','BusinessTravel','StockOptionLevel','JobInvolvement','JobSatisfaction','MaritalStatus','MonthlyIncome','CompanyNum','EnvironmentSatisfaction','Age']
-
-     print(sent_data)
-
      for i in range(0,len(cols)-2,1):
          globals()[col[i]]={}
          for x in range(0,len(sent_data[i]),1):
@@ -518,11 +515,7 @@ def  Pie_chart():
                  sent_2=sent_data[i][x][col[i]]
              
      Age_value={'2':sent_data[9][0]['Mani'],'3':sent_data[9][1]['Mani'],'4':sent_data[9][2]['Mani'],'5':sent_data[9][3]['Mani'],'6':sent_data[9][4]['Mani']}
-          
-
-
      
-        
      compare_data=compare[cols]
      compare_data=compare_data[compare_data["Attrition"] == "Yes"]
      compare_data=compare_data.drop("Attrition", axis = 1)
@@ -530,9 +523,8 @@ def  Pie_chart():
      a=[]
      b=[]
      c=[]
-     print(len(compare_data))
+
      for i in range(0,len(compare_data_v),1):   
-         print(i)
          compare_data_v[i][0]=OverTime[compare_data_v[i][0]]
          compare_data_v[i][1]=BusinessTravel[compare_data_v[i][1]]    
          compare_data_v[i][2]=StockOptionLevel[compare_data_v[i][2]]
@@ -543,27 +535,57 @@ def  Pie_chart():
          compare_data_v[i][7]=income_value(compare_data_v[i][7],low,hi,sent_0,sent_1,sent_2)
          compare_data_v[i][7]=MonthlyIncome[compare_data_v[i][7]]    
          compare_data_v[i][8]=MTable(compare_data_v[i][8])
-         compare_data_v[i][8]=CompanyNum[str(compare_data_v[i][8])]    
+         compare_data_v[i][8]=CompanyNum[str(compare_data_v[i][8])]
+         print(compare_data_v[i][8])
          compare_data_v[i][9]=str(int((round(compare_data_v[i][9],-1))/10))
          compare_data_v[i][9]=Age_value[compare_data_v[i][9]]
-
          max_thir=list(map(list(compare_data_v[i]).index, heapq.nlargest(3, compare_data_v[i])))
          a.append(str(col[max_thir[0]]))
          b.append(str(col[max_thir[1]]))
          c.append(str(col[max_thir[2]]))
-     
+
      compare_data['reason1']=a
      compare_data['reason2']=b
      compare_data['reason3']=c
-     
-     print('fuck')
-     
+     print('fuckfuckfuckfucjkfcuk')
+#     pd.set_option("display.max_rows",1000000000)
+#     pd.set_option("display.max_columns",1000000000)
+     fuck=pd.DataFrame(compare_data_v,columns=col)
+     print(fuck['CompanyNum'])     
      reason1_list=[]
      reason2_list=[]
      reason3_list=[]
      count1_list=[]
      count2_list=[]
      count3_list=[]
+
+     year_arr=[]
+     month_arr=[]
+     day_arr=[]   
+     for i in range(0,len(compare_data),1):
+         year=np.random.randint(2000,2021)
+         year_arr.append(year)
+         month=np.random.randint(1,12)
+         month_arr.append(month)
+         if month in [1,3,5,7,8,10,12]:
+             day=str(np.random.randint(1,31))
+         elif month in [4,6,9,11]:
+             day=str(np.random.randint(1,30))
+         else:
+             if year%4 == 0:              
+                 day=str(np.random.randint(1,29))
+             else:
+                 day=str(np.random.randint(1,28))
+         day_arr.append(day)       
+    
+     compare_data['reason']=a
+     compare_data['year']=year_arr
+     compare_data['month']=month_arr
+     compare_data['day']=day_arr
+     compare_data['EmployeeNumber']=compare['EmployeeNumber']
+     
+
+     df_year=compare_data.groupby(['year']).apply(lambda x:x['year'].count()).reset_index(name='Counts')
 
      for val, cnt in compare_data.reason1.value_counts().iteritems():
      #    print(val,cnt)
@@ -597,7 +619,7 @@ def  Pie_chart():
           df_count1 = df_count1.merge(df, on=['reason'], how='outer')
      df_count1 = df_count1.fillna(0)
 
-     df_count=df_count1.groupby('reason').apply(lambda x:x['count1']*3+x['count2']*2+x['count3']*1).reset_index(name='Counts')
+     df_count=df_count1.groupby('reason').apply(lambda x:x['count1']).reset_index(name='Counts')
      df_count=df_count.sort_values(by='Counts', ascending=False, na_position='first').drop('level_1',axis=1)
      df_count.reset_index(inplace = True) 
      df_count=df_count.drop('index',axis=1)
@@ -610,8 +632,11 @@ def  Pie_chart():
      print(df_count)
 
      inserValuejs = df_count.to_json(orient = 'records')
+     yearjs=df_year.to_json(orient = 'records')
+     print(yearjs)
      inserValues=json.loads(inserValuejs)
-     return make_response(dumps(inserValues))
+     yearValues=json.loads(yearjs)
+     return make_response(dumps([inserValues,yearValues]))
 @app.route('/figure')
 def  figure():
      # 取得前端傳過來的值
