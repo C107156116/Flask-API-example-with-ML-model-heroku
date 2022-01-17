@@ -12,7 +12,7 @@ from flask import Flask, make_response
 app = Flask(__name__)
 app.config['MYSQL_HOST']='remotemysql.com'
 app.config['MYSQL_USER']='GqD8cGeo5O'
-app.config['MYSQL_PASSWORD']='BKeOFOJ8xs'
+app.config['MYSQL_PASSWORD']='We4Vb60cQA'
 app.config['MYSQL_DB']='GqD8cGeo5O'
 mysql=MySQL(app)
 
