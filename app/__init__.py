@@ -889,7 +889,7 @@ def  figure():
                  sent_1=sent_data[i][x][col[i]]
                  sent_2=sent_data[i][x][col[i]]
              
-     Age_value={'2':sent_data[9][0]['Mani'],'3':sent_data[9][1]['Mani'],'4':sent_data[9][2]['Mani'],'5':sent_data[9][3]['Mani'],'6':sent_data[9][4]['Mani'],'1':}
+     Age_value={'2':sent_data[9][0]['Mani'],'3':sent_data[9][1]['Mani'],'4':sent_data[9][2]['Mani'],'5':sent_data[9][3]['Mani'],'6':sent_data[9][4]['Mani']}
           
 
 
