@@ -890,11 +890,7 @@ def  figure():
                  sent_2=sent_data[i][x][col[i]]
              
      Age_value={'2':sent_data[9][0]['Mani'],'3':sent_data[9][1]['Mani'],'4':sent_data[9][2]['Mani'],'5':sent_data[9][3]['Mani'],'6':sent_data[9][4]['Mani']}
-          
-
-
-     
-        
+     print('sss')   
      compare_data=compare[cols]
      compare_data=compare_data[compare_data["Attrition"] == "Yes"]
      compare_data=compare_data.drop("Attrition", axis = 1)
