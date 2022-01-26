@@ -11,7 +11,7 @@ from json import dumps
 from flask import Flask, make_response
 app = Flask(__name__)
 CORS(app)
-data=pd.read_csv('wigitano_hash_202112.csv',encoding='unicode_escape')
+data=pd.read_csv('test.csv',encoding='unicode_escape')
 @app.route('/HelloWord')
 def hello_world():
      try:
