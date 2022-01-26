@@ -45,7 +45,6 @@ def get_home_data():
          data_out=data[data_col]
          print(data_out)
          data_out=data_out.head(2000)
-         data_out.to_csv('test.csv',encoding='utf-8',index=False)
          js = data_out.to_dict(orient="records")
          return make_response(dumps(js))
      except Exception as e:
