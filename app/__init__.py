@@ -11,14 +11,17 @@ from flask import Flask, make_response
 app = Flask(__name__)
 app.config['MYSQL_HOST']='remotemysql.com'
 app.config['MYSQL_USER']='GqD8cGeo5O'
-app.config['MYSQL_PASSWORD']='BKeOFOJ8xs'
+app.config['MYSQL_PASSWORD']='VCLBecsfv3'
 app.config['MYSQL_DB']='GqD8cGeo5O'
 mysql=MySQL(app)
+
 cols_sql=['Age','Attrition','BusinessTravel','DailyRate','Department','DistanceFromHome','Education','EducationField','EmployeeCount','EmployeeNumber','EnvironmentSatisfaction','Gender','HourlyRate','JobInvolvement','JobLevel','JobRole','JobSatisfaction','MaritalStatus','MonthlyIncome','MonthlyRate','NumCompaniesWorked','Over18','OverTime','PercentSalaryHike','PerformanceRating','RelationshipSatisfaction','StandardHours','StockOptionLevel','TotalWorkingYears','TrainingTimesLastYear','WorkLifeBalance','YearsAtCompany','YearsInCurrentRole','YearsSinceLastPromotion','YearsWithCurrManager']
+
 CORS(app)
 @app.route('/HelloWord')
 def hello_world():
      return 'hello!!'
+
 @app.route('/getdata')
 def getdata():
      tmp=[]
@@ -511,7 +514,7 @@ def  Pie_chart():
                  sent_0=sent_data[i][x][col[i]]
                  sent_1=sent_data[i][x][col[i]]
                  sent_2=sent_data[i][x][col[i]]
-             
+     print(sent_data[9][0]['Mani'])        
      Age_value={'2':sent_data[9][0]['Mani'],'3':sent_data[9][1]['Mani'],'4':sent_data[9][2]['Mani'],'5':sent_data[9][3]['Mani'],'6':sent_data[9][4]['Mani']}
      
      compare_data=compare[cols]
@@ -886,11 +889,7 @@ def  figure():
                  sent_2=sent_data[i][x][col[i]]
              
      Age_value={'2':sent_data[9][0]['Mani'],'3':sent_data[9][1]['Mani'],'4':sent_data[9][2]['Mani'],'5':sent_data[9][3]['Mani'],'6':sent_data[9][4]['Mani']}
-          
-
-
-     
-        
+     print('sss')   
      compare_data=compare[cols]
      compare_data=compare_data[compare_data["Attrition"] == "Yes"]
      compare_data=compare_data.drop("Attrition", axis = 1)
