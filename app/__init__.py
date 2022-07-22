@@ -19,7 +19,6 @@ CORS(app)
 @app.route('/HelloWord')
 def hello_world():
      return 'hello!!'
-
 @app.route('/getdata')
 def getdata():
      tmp=[]
