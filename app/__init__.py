@@ -14,9 +14,7 @@ app.config['MYSQL_USER']='GqD8cGeo5O'
 app.config['MYSQL_PASSWORD']='BKeOFOJ8xs'
 app.config['MYSQL_DB']='GqD8cGeo5O'
 mysql=MySQL(app)
-
 cols_sql=['Age','Attrition','BusinessTravel','DailyRate','Department','DistanceFromHome','Education','EducationField','EmployeeCount','EmployeeNumber','EnvironmentSatisfaction','Gender','HourlyRate','JobInvolvement','JobLevel','JobRole','JobSatisfaction','MaritalStatus','MonthlyIncome','MonthlyRate','NumCompaniesWorked','Over18','OverTime','PercentSalaryHike','PerformanceRating','RelationshipSatisfaction','StandardHours','StockOptionLevel','TotalWorkingYears','TrainingTimesLastYear','WorkLifeBalance','YearsAtCompany','YearsInCurrentRole','YearsSinceLastPromotion','YearsWithCurrManager']
-
 CORS(app)
 @app.route('/HelloWord')
 def hello_world():
